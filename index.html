@@ -738,7 +738,7 @@ img{max-width:100%;display:block}
 /* ══════════════════════════════════
    ADMIN STYLES
 ══════════════════════════════════ */
-.admin-view{display:none}
+.admin-view{display:none;visibility:visible}
 .admin-view.active-view{display:block}
 .site-view{display:block}
 .site-view.hidden-view{display:none}
@@ -1210,7 +1210,7 @@ img{max-width:100%;display:block}
       <li><a href="#cocktails-section">Cócteles</a></li>
       <li><a href="#gallery">Galería</a></li>
       <li><a href="#reservas">Reservas</a></li>
-      <li><button class="nav-links a nav-admin" onclick="showAdminLogin()" style="background:var(--gold-glow);color:var(--gold);border:1px solid var(--gold-border);padding:7px 18px;border-radius:50px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;transition:all .4s">Admin</button></li>
+      <li><button class="nav-admin" onclick="showAdminLogin()">⚙ Admin</button></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
   </div>
@@ -1826,7 +1826,12 @@ function getConfig(){return getData('config',CONFIG_DEFAULTS)}
 // ══════════════════════════════════════════════════════
 function showAdminLogin(){
   document.getElementById('site-view').style.display='none';
-  document.getElementById('admin-view').style.display='block';
+  const cv=document.getElementById('carta-view');
+  if(cv){cv.style.display='none';cv.classList.remove('active');}
+  const av=document.getElementById('admin-view');
+  av.style.display='block';
+  av.style.visibility='visible';
+  av.style.opacity='1';
   document.getElementById('login-screen').classList.remove('hidden');
   document.getElementById('admin-panel').classList.add('hidden');
 }
@@ -2366,6 +2371,9 @@ function showToast(msg,type='success'){
 // INIT
 // ══════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
+  // ensure admin hidden on load
+  const _av=document.getElementById('admin-view');
+  if(_av){_av.style.display='none';_av.style.visibility='hidden';}
   if(isLoggedIn()){
     showAdminLogin();
     document.getElementById('login-screen').classList.add('hidden');
@@ -2404,6 +2412,7 @@ function showPage(page, anchor) {
   cartaView.classList.remove('active');
   cartaView.style.display = 'none';
   adminView.style.display = 'none';
+  adminView.style.visibility = 'hidden';
 
   if (page === 'main') {
     siteView.style.display = 'block';
@@ -2416,6 +2425,7 @@ function showPage(page, anchor) {
       }, 80);
     }
     // Re-init stars/parallax if needed
+    adminView.style.visibility='hidden';
     document.title = 'Restaurante The Moon – Costa Adeje, Tenerife';
   } else if (page === 'carta') {
     cartaView.style.display = 'block';
